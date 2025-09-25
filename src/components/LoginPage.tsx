@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Droplets, Shield, Users, Wrench } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
+import heroImage from "@/assets/hero-image.jpg";
 
 interface LoginPageProps {
   onLogin: (role: 'user' | 'technician' | 'admin', credentials: { username: string; password: string }) => void;
@@ -13,6 +15,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const [selectedRole, setSelectedRole] = useState<'user' | 'technician' | 'admin' | null>(null);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const { t, language } = useLanguage();
 
   const handleLogin = async () => {
     if (!selectedRole || !credentials.username || !credentials.password) return;
@@ -28,22 +31,22 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const roles = [
     {
       id: 'user' as const,
-      title: 'नागरिक / User',
-      description: 'जल गुणवत्ता देखें और शिकायत दर्ज करें',
+      title: t('login.user'),
+      description: language === 'hi' ? 'जल गुणवत्ता देखें और शिकायत दर्ज करें' : 'Monitor water quality & submit complaints',
       icon: Users,
       color: 'safe'
     },
     {
       id: 'technician' as const,
-      title: 'तकनीशियन / Technician', 
-      description: 'पंप संचालन और सेंसर मॉनिटरिंग',
+      title: t('login.technician'), 
+      description: language === 'hi' ? 'पंप संचालन और सेंसर मॉनिटरिंग' : 'Pump operation & sensor monitoring',
       icon: Wrench,
       color: 'warning'
     },
     {
       id: 'admin' as const,
-      title: 'प्रशासक / Admin',
-      description: 'पूर्ण सिस्टम प्रबंधन और रिपोर्ट',
+      title: t('login.admin'),
+      description: language === 'hi' ? 'पूर्ण सिस्टम प्रबंधन और रिपोर्ट' : 'Complete system management & reports',
       icon: Shield,
       color: 'primary'
     }
@@ -51,23 +54,31 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
   if (!selectedRole) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-light/20 via-background to-safe-light/20 flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl space-y-8">
+      <div className="min-h-screen relative flex items-center justify-center p-4">
+        {/* Hero Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/85 to-safe/30 backdrop-blur-sm" />
+        </div>
+        
+        <div className="relative z-10 w-full max-w-4xl space-y-8">
           {/* Header */}
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="p-3 rounded-full hero-gradient">
+              <div className="p-3 rounded-full hero-gradient shadow-water">
                 <Droplets className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">
-                जल रक्षक
+                {t('login.title')}
               </h1>
             </div>
-            <p className="text-xl text-muted-foreground">
-              सुरक्षित पानी, हर गांव तक
+            <p className="text-xl text-muted-foreground font-medium">
+              {t('login.description')}
             </p>
             <p className="text-lg text-foreground/80">
-              Rural Water Supply Management System
+              {t('login.subtitle')}
             </p>
           </div>
 
@@ -103,7 +114,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                       className="w-full"
                       variant={role.color === 'safe' ? 'outline' : role.color === 'warning' ? 'secondary' : 'default'}
                     >
-                      लॉगिन करें / Login
+                      {t('login.loginButton')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -113,8 +124,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
           {/* Footer */}
           <div className="text-center text-sm text-muted-foreground">
-            <p>ग्राम पंचायत जल आपूर्ति प्रबंधन प्रणाली</p>
-            <p>Village Panchayat Water Supply Management System</p>
+            <p>{t('layout.footerTitle')}</p>
           </div>
         </div>
       </div>
@@ -122,37 +132,47 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-light/20 via-background to-safe-light/20 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* Hero Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background/80 to-safe/20 backdrop-blur-sm" />
+      </div>
+      
+      <Card className="relative z-10 w-full max-w-md bg-card/95 backdrop-blur-sm shadow-water border-primary/20">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 rounded-full hero-gradient">
+            <div className="p-2 rounded-full hero-gradient shadow-water">
               <Droplets className="h-6 w-6 text-white" />
             </div>
-            <CardTitle className="text-2xl">जल रक्षक</CardTitle>
+            <CardTitle className="text-2xl">{t('login.title')}</CardTitle>
           </div>
           <CardDescription>
-            {roles.find(r => r.id === selectedRole)?.title} के रूप में लॉगिन करें
+            {roles.find(r => r.id === selectedRole)?.title} {language === 'hi' ? 'के रूप में लॉगिन करें' : 'Login'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">उपयोगकर्ता नाम / Username</Label>
+            <Label htmlFor="username">{t('login.username')}</Label>
             <Input
               id="username"
               placeholder="Enter username"
               value={credentials.username}
               onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+              className="border-primary/20 focus:border-primary"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">पासवर्ड / Password</Label>
+            <Label htmlFor="password">{t('login.password')}</Label>
             <Input
               id="password"
               type="password"
               placeholder="Enter password"
               value={credentials.password}
               onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+              className="border-primary/20 focus:border-primary"
             />
           </div>
           <div className="flex gap-2">
@@ -161,14 +181,14 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               className="w-full"
               onClick={() => setSelectedRole(null)}
             >
-              वापस / Back
+              {language === 'hi' ? 'वापस' : 'Back'}
             </Button>
             <Button
-              className="w-full"
+              className="w-full water-gradient hover:opacity-90 text-white shadow-water"
               onClick={handleLogin}
               disabled={!credentials.username || !credentials.password || isLoading}
             >
-              {isLoading ? 'लॉगिन हो रहा है...' : 'लॉगिन / Login'}
+              {isLoading ? (language === 'hi' ? 'लॉगिन हो रहा है...' : 'Logging in...') : t('login.loginButton')}
             </Button>
           </div>
         </CardContent>

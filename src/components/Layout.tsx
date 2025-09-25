@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Droplets, LogOut, Bell, Settings, Menu, X } from "lucide-react";
+import { Droplets, LogOut, Bell, Settings, Menu, X, Sun, Moon, Languages } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useTheme } from "@/components/ThemeProvider";
+import { useLanguage } from "@/components/LanguageProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,12 +19,14 @@ interface LayoutProps {
 
 export function Layout({ children, userRole, onLogout }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
 
   const getRoleTitle = () => {
     switch (userRole) {
-      case 'user': return 'नागरिक / User';
-      case 'technician': return 'तकनीशियन / Technician';
-      case 'admin': return 'प्रशासक / Admin';
+      case 'user': return language === 'hi' ? 'नागरिक' : 'Citizen';
+      case 'technician': return language === 'hi' ? 'तकनीशियन' : 'Technician';
+      case 'admin': return language === 'hi' ? 'प्रशासक' : 'Admin';
     }
   };
 
@@ -40,10 +50,10 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">
-                जल रक्षक
+                {t('login.title')}
               </h1>
               <p className="text-xs text-muted-foreground hidden sm:block">
-                Jal Rakshak - Water Supply Management
+                {t('login.subtitle')}
               </p>
             </div>
           </div>
@@ -68,6 +78,32 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
               {getRoleTitle()}
             </Badge>
 
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
+
+            {/* Language Toggle */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <Languages className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setLanguage('hi')}>
+                  {t('common.hindi')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('en')}>
+                  {t('common.english')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* Notifications */}
             <Button variant="ghost" size="sm" className="relative">
               <Bell className="h-5 w-5" />
@@ -84,7 +120,7 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
             {/* Logout */}
             <Button variant="outline" size="sm" onClick={onLogout}>
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              {t('layout.logout')}
             </Button>
           </div>
         </div>
@@ -125,12 +161,11 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
       <footer className="border-t bg-card/30 py-4 px-6">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div>
-            <p>ग्राम पंचायत जल आपूर्ति प्रबंधन प्रणाली</p>
-            <p className="text-xs">Village Panchayat Water Supply Management System</p>
+            <p>{t('layout.footerTitle')}</p>
           </div>
           <div className="text-xs">
-            <p>© 2025 Jal Rakshak</p>
-            <p>सुरक्षित पानी, हर गांव तक</p>
+            <p>{t('layout.footerCopyright')}</p>
+            <p>{t('layout.footerSlogan')}</p>
           </div>
         </div>
       </footer>
