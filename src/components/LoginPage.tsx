@@ -3,59 +3,62 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Droplets, Shield, Users, Wrench } from "lucide-react";
+import { Droplets, Shield, Users, Wrench, MapPin, Mail, Languages, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useTheme } from "@/components/ThemeProvider";
 import heroImage from "@/assets/hero-image.jpg";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface LoginPageProps {
   onLogin: (role: 'user' | 'technician' | 'admin', credentials: { username: string; password: string }) => void;
+  onBack: () => void;
 }
 
-export function LoginPage({ onLogin }: LoginPageProps) {
-  const [selectedRole, setSelectedRole] = useState<'user' | 'technician' | 'admin' | null>(null);
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+export function LoginPage({ onLogin, onBack }: LoginPageProps) {
+  const [selectedCategory, setSelectedCategory] = useState<'users' | 'officials' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<'user' | 'pumpOperator' | 'vwsc' | 'sarpanch' | null>(null);
+  const [credentials, setCredentials] = useState({ username: '', password: '', email: '' });
+  const [locationEnabled, setLocationEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
 
   const handleLogin = async () => {
-    if (!selectedRole || !credentials.username || !credentials.password) return;
+    if (!selectedRole) return;
+    
+    // Check validation based on category
+    if (selectedCategory === 'users') {
+      if (!credentials.username || !credentials.password || !locationEnabled) return;
+    } else if (selectedCategory === 'officials') {
+      if (!credentials.email || !credentials.password) return;
+    }
     
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      onLogin(selectedRole, credentials);
+      const role = selectedRole === 'user' ? 'user' : 
+                   selectedRole === 'pumpOperator' ? 'technician' : 'admin';
+      onLogin(role, credentials);
       setIsLoading(false);
     }, 1000);
   };
 
-  const roles = [
-    {
-      id: 'user' as const,
-      title: t('login.user'),
-      description: language === 'hi' ? 'जल गुणवत्ता देखें और शिकायत दर्ज करें' : 'Monitor water quality & submit complaints',
-      icon: Users,
-      color: 'safe'
-    },
-    {
-      id: 'technician' as const,
-      title: t('login.technician'), 
-      description: language === 'hi' ? 'पंप संचालन और सेंसर मॉनिटरिंग' : 'Pump operation & sensor monitoring',
-      icon: Wrench,
-      color: 'warning'
-    },
-    {
-      id: 'admin' as const,
-      title: t('login.admin'),
-      description: language === 'hi' ? 'पूर्ण सिस्टम प्रबंधन और रिपोर्ट' : 'Complete system management & reports',
-      icon: Shield,
-      color: 'primary'
-    }
-  ];
+  const enableLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      () => setLocationEnabled(true),
+      () => alert(language === 'hi' ? 'कृपया अपना स्थान सक्षम करें' : 'Please enable location access')
+    );
+  };
 
-  if (!selectedRole) {
+  // Category Selection
+  if (!selectedCategory) {
     return (
       <div className="min-h-screen relative flex items-center justify-center p-4">
-        {/* Hero Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -63,8 +66,33 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/85 to-safe/30 backdrop-blur-sm" />
         </div>
         
-        <div className="relative z-10 w-full max-w-4xl space-y-8">
-          {/* Header */}
+        {/* Header with Language & Theme */}
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Languages className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setLanguage('hi')}>
+                🇮🇳 हिंदी
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')}>
+                🇬🇧 English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </Button>
+        </div>
+        
+        <div className="relative z-10 w-full max-w-2xl space-y-8">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="p-3 rounded-full hero-gradient shadow-water">
@@ -74,17 +102,99 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 {t('login.title')}
               </h1>
             </div>
-            <p className="text-xl text-muted-foreground font-medium">
-              {t('login.description')}
-            </p>
-            <p className="text-lg text-foreground/80">
-              {t('login.subtitle')}
-            </p>
+            <Button 
+              onClick={onBack}
+              variant="outline"
+              className="mb-4"
+            >
+              ← {language === 'hi' ? 'वापस होम पेज पर' : 'Back to Home'}
+            </Button>
           </div>
 
-          {/* Role Selection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card 
+              className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+              onClick={() => setSelectedCategory('users')}
+            >
+              <CardHeader className="text-center pb-4">
+                <div className="mx-auto p-4 rounded-full bg-safe/10 mb-4">
+                  <Users className="h-8 w-8 text-safe" />
+                </div>
+                <CardTitle className="text-xl">{t('login.users')}</CardTitle>
+                <CardDescription className="text-sm">
+                  {t('login.usersDesc')}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card 
+              className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+              onClick={() => setSelectedCategory('officials')}
+            >
+              <CardHeader className="text-center pb-4">
+                <div className="mx-auto p-4 rounded-full bg-primary/10 mb-4">
+                  <Shield className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-xl">{t('login.officials')}</CardTitle>
+                <CardDescription className="text-sm">
+                  {t('login.officialsDesc')}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Role Selection for Officials
+  if (selectedCategory === 'officials' && !selectedRole) {
+    const officialRoles = [
+      {
+        id: 'pumpOperator' as const,
+        title: t('login.pumpOperator'),
+        description: language === 'hi' ? 'पंप संचालन और मॉनिटरिंग' : 'Pump operation & monitoring',
+        icon: Wrench,
+        color: 'warning'
+      },
+      {
+        id: 'vwsc' as const,
+        title: t('login.vwsc'),
+        description: language === 'hi' ? 'गांव जल एवं स्वच्छता समिति' : 'Village Water & Sanitation Committee',
+        icon: Shield,
+        color: 'primary'
+      },
+      {
+        id: 'sarpanch' as const,
+        title: t('login.sarpanchOffice'),
+        description: language === 'hi' ? 'ग्राम पंचायत कार्यालय' : 'Gram Panchayat Office',
+        icon: Shield,
+        color: 'primary'
+      }
+    ];
+
+    return (
+      <div className="min-h-screen relative flex items-center justify-center p-4">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/85 to-safe/30 backdrop-blur-sm" />
+        </div>
+        
+        <div className="relative z-10 w-full max-w-4xl space-y-8">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">{t('login.officials')}</h2>
+            <Button 
+              onClick={() => setSelectedCategory(null)}
+              variant="outline"
+            >
+              ← {language === 'hi' ? 'वापस' : 'Back'}
+            </Button>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {roles.map((role) => {
+            {officialRoles.map((role) => {
               const Icon = role.icon;
               return (
                 <Card 
@@ -94,14 +204,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 >
                   <CardHeader className="text-center pb-4">
                     <div className={`mx-auto p-4 rounded-full mb-4 ${
-                      role.color === 'safe' ? 'bg-safe/10' :
-                      role.color === 'warning' ? 'bg-warning/10' :
-                      'bg-primary/10'
+                      role.color === 'warning' ? 'bg-warning/10' : 'bg-primary/10'
                     }`}>
                       <Icon className={`h-8 w-8 ${
-                        role.color === 'safe' ? 'text-safe' :
-                        role.color === 'warning' ? 'text-warning' :
-                        'text-primary'
+                        role.color === 'warning' ? 'text-warning' : 'text-primary'
                       }`} />
                     </div>
                     <CardTitle className="text-xl">{role.title}</CardTitle>
@@ -109,31 +215,23 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                       {role.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <Button 
-                      className="w-full"
-                      variant={role.color === 'safe' ? 'outline' : role.color === 'warning' ? 'secondary' : 'default'}
-                    >
-                      {t('login.loginButton')}
-                    </Button>
-                  </CardContent>
                 </Card>
               );
             })}
-          </div>
-
-          {/* Footer */}
-          <div className="text-center text-sm text-muted-foreground">
-            <p>{t('layout.footerTitle')}</p>
           </div>
         </div>
       </div>
     );
   }
 
+  // Users direct to login (no role selection needed)
+  if (selectedCategory === 'users' && !selectedRole) {
+    setSelectedRole('user');
+  }
+
+  // Login Form
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4">
-      {/* Hero Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroImage})` }}
@@ -150,20 +248,65 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             <CardTitle className="text-2xl">{t('login.title')}</CardTitle>
           </div>
           <CardDescription>
-            {roles.find(r => r.id === selectedRole)?.title} {language === 'hi' ? 'के रूप में लॉगिन करें' : 'Login'}
+            {selectedCategory === 'users' ? t('login.users') : 
+             selectedRole === 'pumpOperator' ? t('login.pumpOperator') :
+             selectedRole === 'vwsc' ? t('login.vwsc') : t('login.sarpanchOffice')} 
+            {language === 'hi' ? ' लॉगिन' : ' Login'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="username">{t('login.username')}</Label>
-            <Input
-              id="username"
-              placeholder="Enter username"
-              value={credentials.username}
-              onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
-              className="border-primary/20 focus:border-primary"
-            />
-          </div>
+          {selectedCategory === 'users' ? (
+            <>
+              {/* Location Enable for Users */}
+              <div className="space-y-2">
+                <Button
+                  onClick={enableLocation}
+                  disabled={locationEnabled}
+                  className={`w-full ${locationEnabled ? 'bg-safe text-white' : ''}`}
+                  variant={locationEnabled ? 'default' : 'outline'}
+                >
+                  <MapPin className="w-4 h-4 mr-2" />
+                  {locationEnabled 
+                    ? (language === 'hi' ? 'स्थान सक्षम है ✓' : 'Location Enabled ✓')
+                    : t('login.enableLocation')
+                  }
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  {t('login.locationDesc')}
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="username">{t('login.username')}</Label>
+                <Input
+                  id="username"
+                  placeholder="Enter username"
+                  value={credentials.username}
+                  onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+                  className="border-primary/20 focus:border-primary"
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Email for Officials */}
+              <div className="space-y-2">
+                <Label htmlFor="email">{t('login.registeredEmail')}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter registered email"
+                  value={credentials.email}
+                  onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
+                  className="border-primary/20 focus:border-primary"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {t('login.emailDesc')}
+                </p>
+              </div>
+            </>
+          )}
+          
           <div className="space-y-2">
             <Label htmlFor="password">{t('login.password')}</Label>
             <Input
@@ -175,18 +318,27 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               className="border-primary/20 focus:border-primary"
             />
           </div>
+          
           <div className="flex gap-2">
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => setSelectedRole(null)}
+              onClick={() => {
+                if (selectedCategory === 'users') {
+                  setSelectedCategory(null);
+                  setSelectedRole(null);
+                } else {
+                  setSelectedRole(null);
+                }
+              }}
             >
               {language === 'hi' ? 'वापस' : 'Back'}
             </Button>
             <Button
               className="w-full water-gradient hover:opacity-90 text-white shadow-water"
               onClick={handleLogin}
-              disabled={!credentials.username || !credentials.password || isLoading}
+              disabled={isLoading || (selectedCategory === 'users' && (!credentials.username || !credentials.password || !locationEnabled)) ||
+                       (selectedCategory === 'officials' && (!credentials.email || !credentials.password))}
             >
               {isLoading ? (language === 'hi' ? 'लॉगिन हो रहा है...' : 'Logging in...') : t('login.loginButton')}
             </Button>

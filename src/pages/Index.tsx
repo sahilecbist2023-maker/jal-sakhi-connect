@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HomePage } from "@/components/HomePage";
 import { LoginPage } from "@/components/LoginPage";
 import { UserDashboard } from "@/components/UserDashboard";
 import { TechnicianDashboard } from "@/components/TechnicianDashboard";
@@ -13,19 +14,31 @@ interface User {
 }
 
 const Index = () => {
+  const [currentPage, setCurrentPage] = useState<'home' | 'login' | 'dashboard'>('home');
   const [user, setUser] = useState<User | null>(null);
 
   const handleLogin = (role: UserRole, credentials: { username: string; password: string }) => {
     // In a real app, you would validate credentials with your backend
     setUser({ role, username: credentials.username });
+    setCurrentPage('dashboard');
   };
 
   const handleLogout = () => {
     setUser(null);
+    setCurrentPage('home');
   };
 
-  if (!user) {
-    return <LoginPage onLogin={handleLogin} />;
+  if (currentPage === 'home') {
+    return <HomePage onGetStarted={() => setCurrentPage('login')} />;
+  }
+
+  if (currentPage === 'login' || !user) {
+    return (
+      <LoginPage 
+        onLogin={handleLogin} 
+        onBack={() => setCurrentPage('home')} 
+      />
+    );
   }
 
   const renderDashboard = () => {
