@@ -49,10 +49,20 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
   };
 
   const enableLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      () => setLocationEnabled(true),
-      () => alert(language === 'hi' ? 'कृपया अपना स्थान सक्षम करें' : 'Please enable location access')
-    );
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('Location enabled:', position.coords);
+          setLocationEnabled(true);
+        },
+        (error) => {
+          console.error('Location error:', error);
+          alert(language === 'hi' ? 'कृपया अपना स्थान सक्षम करें' : 'Please enable location access');
+        }
+      );
+    } else {
+      alert(language === 'hi' ? 'आपका ब्राउज़र GPS का समर्थन नहीं करता' : 'Your browser does not support GPS');
+    }
   };
 
   // Category Selection
@@ -160,14 +170,14 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
       {
         id: 'vwsc' as const,
         title: t('login.vwsc'),
-        description: language === 'hi' ? 'गांव जल एवं स्वच्छता समिति' : 'Village Water & Sanitation Committee',
+        description: language === 'hi' ? 'गाँव स्तर - एक गाँव के लिए' : 'Village Level - For one village',
         icon: Shield,
         color: 'primary'
       },
       {
         id: 'sarpanch' as const,
         title: t('login.sarpanchOffice'),
-        description: language === 'hi' ? 'ग्राम पंचायत कार्यालय' : 'Gram Panchayat Office',
+        description: language === 'hi' ? 'ग्राम पंचायत स्तर - 3-6 गाँवों के लिए' : 'Gram Panchayat Level - Covers 3-6 villages',
         icon: Shield,
         color: 'primary'
       }
