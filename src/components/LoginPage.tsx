@@ -70,11 +70,10 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     return (
       <div className="min-h-screen relative flex items-center justify-center p-4">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/85 to-safe/30 backdrop-blur-sm" />
-        </div>
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
         
         {/* Header with Language & Theme */}
         <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
@@ -115,15 +114,15 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             <Button 
               onClick={onBack}
               variant="outline"
-              className="mb-4"
+              className="mb-4 border-primary/40 hover:bg-primary/10"
             >
-              ← {language === 'hi' ? 'वापस होम पेज पर' : 'Back to Home'}
+              ← {t('login.backToHome')}
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card 
-              className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+              className="cursor-pointer transition-all duration-300 hover:shadow-water hover:scale-105 border-2 border-border hover:border-primary/50 bg-card/90 backdrop-blur-md"
               onClick={() => setSelectedCategory('users')}
             >
               <CardHeader className="text-center pb-4">
@@ -138,7 +137,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             </Card>
 
             <Card 
-              className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+              className="cursor-pointer transition-all duration-300 hover:shadow-water hover:scale-105 border-2 border-border hover:border-primary/50 bg-card/90 backdrop-blur-md"
               onClick={() => setSelectedCategory('officials')}
             >
               <CardHeader className="text-center pb-4">
@@ -186,11 +185,10 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     return (
       <div className="min-h-screen relative flex items-center justify-center p-4">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/85 to-safe/30 backdrop-blur-sm" />
-        </div>
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
         
         <div className="relative z-10 w-full max-w-4xl space-y-8">
           <div className="text-center space-y-4">
@@ -198,8 +196,9 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             <Button 
               onClick={() => setSelectedCategory(null)}
               variant="outline"
+              className="border-primary/40 hover:bg-primary/10"
             >
-              ← {language === 'hi' ? 'वापस' : 'Back'}
+              ← {t('login.back')}
             </Button>
           </div>
 
@@ -209,7 +208,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
               return (
                 <Card 
                   key={role.id}
-                  className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+                  className="cursor-pointer transition-all duration-300 hover:shadow-water hover:scale-105 border-2 border-border hover:border-primary/50 bg-card/90 backdrop-blur-md"
                   onClick={() => setSelectedRole(role.id)}
                 >
                   <CardHeader className="text-center pb-4">
@@ -243,13 +242,12 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background/80 to-safe/20 backdrop-blur-sm" />
-      </div>
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
       
-      <Card className="relative z-10 w-full max-w-md bg-card/95 backdrop-blur-sm shadow-water border-primary/20">
+      <Card className="relative z-10 w-full max-w-md bg-card/95 backdrop-blur-md shadow-water border-primary/30">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <div className="p-2 rounded-full hero-gradient shadow-water">
@@ -342,7 +340,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
                 }
               }}
             >
-              {language === 'hi' ? 'वापस' : 'Back'}
+              {t('login.back')}
             </Button>
             <Button
               className="w-full water-gradient hover:opacity-90 text-white shadow-water"

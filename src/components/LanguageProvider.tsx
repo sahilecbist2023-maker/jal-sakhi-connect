@@ -37,6 +37,8 @@ const translations = {
     "home.feature4": "Predictive Maintenance Alerts",
     "home.getStarted": "Get Started",
     "home.loginNow": "Login Now",
+    "home.startToday": "Start Today",
+    "home.startTodayDesc": "Join us in improving your village water supply system",
     
     // Login Page
     "login.title": "Login to Jal Rakshak",
@@ -56,6 +58,8 @@ const translations = {
     "login.password": "Password",
     "login.email": "Email ID",
     "login.loginButton": "Login",
+    "login.back": "Back",
+    "login.backToHome": "Back to Home",
     
     // Layout
     "layout.notifications": "Notifications",
@@ -109,6 +113,8 @@ const translations = {
     "home.feature4": "प्रेडिक्टिव मेंटेनेंस अलर्ट",
     "home.getStarted": "शुरू करें",
     "home.loginNow": "अभी लॉगिन करें",
+    "home.startToday": "आज ही शुरू करें",
+    "home.startTodayDesc": "अपने गांव के पानी की आपूर्ति को बेहतर बनाने में शामिल हों",
     
     // Login Page
     "login.title": "जल रक्षक में लॉगिन करें",
@@ -128,6 +134,8 @@ const translations = {
     "login.password": "पासवर्ड",
     "login.email": "ईमेल आईडी",
     "login.loginButton": "लॉगिन करें",
+    "login.back": "वापस",
+    "login.backToHome": "वापस होम पेज पर",
     
     // Layout
     "layout.notifications": "सूचनाएं",

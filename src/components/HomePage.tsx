@@ -46,19 +46,20 @@ export function HomePage({ onGetStarted }: HomePageProps) {
     <div className="min-h-screen relative">
       {/* Hero Background */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background/90 to-safe/20 backdrop-blur-sm" />
-      </div>
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
 
       {/* Header with Language & Theme */}
-      <header className="relative z-10 flex justify-between items-center p-4 bg-card/30 backdrop-blur-sm">
+      <header className="relative z-10 flex justify-between items-center p-4 bg-card/80 backdrop-blur-md border-b border-border shadow-sm">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-full hero-gradient">
+          <div className="p-2 rounded-full hero-gradient shadow-water">
             <Droplets className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-foreground">{t('home.title')}</h1>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">
+            {t('home.title')}
+          </h1>
         </div>
         
         <div className="flex items-center gap-2">
@@ -115,7 +116,7 @@ export function HomePage({ onGetStarted }: HomePageProps) {
         </div>
 
         {/* About Section */}
-        <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+        <Card className="bg-card/90 backdrop-blur-md border-primary/30 shadow-card">
           <CardHeader>
             <CardTitle className="text-2xl text-center">{t('home.about')}</CardTitle>
           </CardHeader>
@@ -138,7 +139,7 @@ export function HomePage({ onGetStarted }: HomePageProps) {
               return (
                 <Card 
                   key={index}
-                  className="bg-card/80 backdrop-blur-sm border-primary/20 hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  className="bg-card/90 backdrop-blur-md border-primary/30 hover:shadow-water transition-all duration-300 hover:scale-105"
                 >
                   <CardHeader className="text-center pb-4">
                     <div className="mx-auto p-4 rounded-full bg-primary/10 mb-4">
@@ -158,13 +159,10 @@ export function HomePage({ onGetStarted }: HomePageProps) {
         {/* CTA Section */}
         <div className="text-center space-y-4 py-8">
           <h3 className="text-2xl font-semibold text-foreground">
-            {language === 'hi' ? 'आज ही शुरू करें' : 'Start Today'}
+            {t('home.startToday')}
           </h3>
           <p className="text-muted-foreground max-w-md mx-auto">
-            {language === 'hi' 
-              ? 'अपने गांव के पानी की आपूर्ति को बेहतर बनाने में शामिल हों'
-              : 'Join us in improving your village water supply system'
-            }
+            {t('home.startTodayDesc')}
           </p>
           <Button 
             onClick={onGetStarted}
