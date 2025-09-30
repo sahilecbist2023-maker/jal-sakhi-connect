@@ -33,20 +33,25 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     
     // Check validation based on category
     if (selectedCategory === 'users') {
-      if (!credentials.username || !credentials.password || !locationEnabled) return;
+      if (!credentials.username || !credentials.password) return;
     } else if (selectedCategory === 'officials') {
       if (!credentials.email || !credentials.password) return;
     }
-    
+
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      const role = selectedRole === 'user' ? 'user' : 
-                   selectedRole === 'pumpOperator' ? 'technician' : 'admin';
+      const role =
+        selectedRole === 'user' ? 'user' :
+        selectedRole === 'pumpOperator' ? 'technician' :
+        selectedRole === 'vwsc' ? 'technician' :
+        'admin';
       onLogin(role, credentials);
       setIsLoading(false);
     }, 1000);
   };
+
+  const enableLocation = () => {
 
   const enableLocation = () => {
     if (navigator.geolocation) {
@@ -56,12 +61,12 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
           setLocationEnabled(true);
         },
         (error) => {
-          console.error('Location error:', error);
-          alert(language === 'hi' ? 'कृपया अपना स्थान सक्षम करें' : 'Please enable location access');
+          console.warn('Location error:', error);
+          setLocationEnabled(false);
         }
       );
     } else {
-      alert(language === 'hi' ? 'आपका ब्राउज़र GPS का समर्थन नहीं करता' : 'Your browser does not support GPS');
+      console.warn('Geolocation not supported');
     }
   };
 
