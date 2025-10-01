@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface LoginPageProps {
-  onLogin: (role: 'user' | 'technician' | 'admin', credentials: { username: string; password: string }) => void;
+  onLogin: (role: 'user' | 'technician' | 'vwsc' | 'admin', credentials: { username: string; password: string }) => void;
   onBack: () => void;
 }
 
@@ -41,10 +41,14 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      // Map roles correctly: VWSC -> technician, GP levels -> admin
+      // Map roles correctly: 
+      // - user -> user dashboard
+      // - pumpOperator -> technician dashboard (pump operations)
+      // - vwsc -> vwsc dashboard (village water committee)
+      // - sarpanch -> admin dashboard (GP level, covers 3-6 villages)
       const role = selectedRole === 'user' ? 'user' : 
                    selectedRole === 'pumpOperator' ? 'technician' : 
-                   selectedRole === 'vwsc' ? 'technician' : 'admin';
+                   selectedRole === 'vwsc' ? 'vwsc' : 'admin';
       onLogin(role, credentials);
       setIsLoading(false);
     }, 1000);

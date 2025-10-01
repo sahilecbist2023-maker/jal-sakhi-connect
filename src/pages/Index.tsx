@@ -3,10 +3,11 @@ import { HomePage } from "@/components/HomePage";
 import { LoginPage } from "@/components/LoginPage";
 import { UserDashboard } from "@/components/UserDashboard";
 import { TechnicianDashboard } from "@/components/TechnicianDashboard";
+import { VWSCDashboard } from "@/components/VWSCDashboard";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { Layout } from "@/components/Layout";
 
-type UserRole = 'user' | 'technician' | 'admin';
+type UserRole = 'user' | 'technician' | 'vwsc' | 'admin';
 
 interface User {
   role: UserRole;
@@ -47,6 +48,8 @@ const Index = () => {
         return <UserDashboard />;
       case 'technician':
         return <TechnicianDashboard />;
+      case 'vwsc':
+        return <VWSCDashboard />;
       case 'admin':
         return <AdminDashboard />;
       default:

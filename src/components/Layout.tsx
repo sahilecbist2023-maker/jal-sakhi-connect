@@ -13,7 +13,7 @@ import {
 
 interface LayoutProps {
   children: React.ReactNode;
-  userRole: 'user' | 'technician' | 'admin';
+  userRole: 'user' | 'technician' | 'vwsc' | 'admin';
   onLogout: () => void;
 }
 
@@ -26,6 +26,7 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
     switch (userRole) {
       case 'user': return language === 'hi' ? 'नागरिक' : 'Citizen';
       case 'technician': return language === 'hi' ? 'तकनीशियन' : 'Technician';
+      case 'vwsc': return language === 'hi' ? 'VWSC सदस्य' : 'VWSC Member';
       case 'admin': return language === 'hi' ? 'प्रशासक' : 'Admin';
     }
   };
@@ -34,6 +35,7 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
     switch (userRole) {
       case 'user': return 'safe';
       case 'technician': return 'warning';
+      case 'vwsc': return 'primary';
       case 'admin': return 'primary';
     }
   };
