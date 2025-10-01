@@ -72,8 +72,8 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     return (
       <div className="min-h-screen relative flex items-center justify-center p-4">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})`, opacity: 0.12 }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
         
@@ -187,8 +187,8 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     return (
       <div className="min-h-screen relative flex items-center justify-center p-4">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})`, opacity: 0.12 }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
         
@@ -244,8 +244,8 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroImage})`, opacity: 0.12 }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
       
