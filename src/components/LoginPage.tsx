@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Droplets, Shield, Users, Wrench, MapPin, Mail, Languages, Sun, Moon } from "lucide-react";
+import { Droplets, Shield, Users, Wrench, MapPin, Languages, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import heroImage from "@/assets/hero-image.jpg";
@@ -31,9 +31,9 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
   const handleLogin = async () => {
     if (!selectedRole) return;
     
-    // Check validation based on category
+    // GPS is optional for users - just for display
     if (selectedCategory === 'users') {
-      if (!credentials.username || !credentials.password || !locationEnabled) return;
+      if (!credentials.username || !credentials.password) return;
     } else if (selectedCategory === 'officials') {
       if (!credentials.email || !credentials.password) return;
     }
@@ -41,8 +41,10 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
+      // Map roles correctly: VWSC -> technician, GP levels -> admin
       const role = selectedRole === 'user' ? 'user' : 
-                   selectedRole === 'pumpOperator' ? 'technician' : 'admin';
+                   selectedRole === 'pumpOperator' ? 'technician' : 
+                   selectedRole === 'vwsc' ? 'technician' : 'admin';
       onLogin(role, credentials);
       setIsLoading(false);
     }, 1000);
@@ -265,7 +267,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
         <CardContent className="space-y-4">
           {selectedCategory === 'users' ? (
             <>
-              {/* Location Enable for Users */}
+              {/* Optional Location Enable for Users */}
               <div className="space-y-2">
                 <Button
                   onClick={enableLocation}
@@ -280,7 +282,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
                   }
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                  {t('login.locationDesc')}
+                  {language === 'hi' ? '(वैकल्पिक - केवल प्रदर्शन के लिए)' : '(Optional - for display only)'}
                 </p>
               </div>
               
@@ -345,7 +347,7 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             <Button
               className="w-full water-gradient hover:opacity-90 text-white shadow-water"
               onClick={handleLogin}
-              disabled={isLoading || (selectedCategory === 'users' && (!credentials.username || !credentials.password || !locationEnabled)) ||
+              disabled={isLoading || (selectedCategory === 'users' && (!credentials.username || !credentials.password)) ||
                        (selectedCategory === 'officials' && (!credentials.email || !credentials.password))}
             >
               {isLoading ? (language === 'hi' ? 'लॉगिन हो रहा है...' : 'Logging in...') : t('login.loginButton')}
