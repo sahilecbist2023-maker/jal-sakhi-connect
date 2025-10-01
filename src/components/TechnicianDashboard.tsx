@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useLanguage } from "@/components/LanguageProvider";
 import { 
   Settings, 
   AlertTriangle, 
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 
 export function TechnicianDashboard() {
+  const { t } = useLanguage();
   const [pumpStates, setPumpStates] = useState({
     rampur: { mode: 'auto', status: 'running', runtime: 18.5 },
     danapur: { mode: 'manual', status: 'stopped', runtime: 12.2 },
@@ -98,12 +100,11 @@ export function TechnicianDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">तकनीशियन डैशबोर्ड</h1>
-          <p className="text-muted-foreground">Technician Dashboard</p>
+          <h1 className="text-3xl font-bold">{t('technician.dashboard')}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />
-          <span className="text-sm text-muted-foreground">System Control</span>
+          <span className="text-sm text-muted-foreground">{t('technician.systemControl')}</span>
         </div>
       </div>
 
@@ -117,12 +118,12 @@ export function TechnicianDashboard() {
                 <p>{alert.message}</p>
                 <p className="text-xs text-muted-foreground mt-1">{alert.time}</p>
               </div>
-              <Badge 
-                variant={alert.severity === 'high' ? 'destructive' : alert.severity === 'medium' ? 'secondary' : 'outline'}
-                className="text-xs"
-              >
-                {alert.severity} priority
-              </Badge>
+                <Badge 
+                  variant={alert.severity === 'high' ? 'destructive' : alert.severity === 'medium' ? 'secondary' : 'outline'}
+                  className="text-xs"
+                >
+                  {alert.severity} {t('technician.priority')}
+                </Badge>
             </AlertDescription>
           </Alert>
         ))}
@@ -140,7 +141,7 @@ export function TechnicianDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.ph}</div>
             <Progress value={(sensorData.ph / 14) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Normal: 6.5-8.5</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.normalRange')}: 6.5-8.5</p>
           </CardContent>
         </Card>
 
@@ -154,7 +155,7 @@ export function TechnicianDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.turbidity} NTU</div>
             <Progress value={100 - (sensorData.turbidity / 10) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Good: &lt;5 NTU</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.good')}: &lt;5 NTU</p>
           </CardContent>
         </Card>
 
@@ -168,7 +169,7 @@ export function TechnicianDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.dissolvedOxygen} mg/L</div>
             <Progress value={(sensorData.dissolvedOxygen / 15) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Good: &gt;6 mg/L</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.good')}: &gt;6 mg/L</p>
           </CardContent>
         </Card>
 
@@ -196,7 +197,7 @@ export function TechnicianDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.pressure} PSI</div>
             <Progress value={(sensorData.pressure / 60) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Normal: 30-50 PSI</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.normalRange')}: 30-50 PSI</p>
           </CardContent>
         </Card>
 
@@ -210,7 +211,7 @@ export function TechnicianDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.flowRate} L/min</div>
             <Progress value={(sensorData.flowRate / 200) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Target: 150 L/min</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.target')}: 150 L/min</p>
           </CardContent>
         </Card>
       </div>
@@ -220,9 +221,9 @@ export function TechnicianDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Power className="h-5 w-5" />
-            पंप नियंत्रण / Pump Control System
+            {t('technician.pumpControl')}
           </CardTitle>
-          <CardDescription>मैन्युअल और ऑटो मोड कंट्रोल</CardDescription>
+          <CardDescription>{t('technician.pumpControlDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -239,7 +240,7 @@ export function TechnicianDashboard() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <Label htmlFor={`mode-${division.id}`} className="text-sm">
-                        Mode: {pump.mode === 'auto' ? 'Auto' : 'Manual'}
+                        {t('technician.mode')}: {pump.mode === 'auto' ? t('technician.auto') : t('technician.manual')}
                       </Label>
                       <Switch
                         id={`mode-${division.id}`}
@@ -250,22 +251,22 @@ export function TechnicianDashboard() {
                     
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span>Status</span>
+                        <span>{t('technician.status')}</span>
                         <Badge 
                           variant={pump.status === 'running' ? 'default' : 'secondary'}
                           className={`text-xs bg-${getStatusColor(pump.status)}/10 text-${getStatusColor(pump.status)}`}
                         >
-                          {pump.status}
+                          {pump.status === 'running' ? t('technician.running') : pump.status === 'stopped' ? t('technician.stopped') : pump.status}
                         </Badge>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span>Runtime Today</span>
+                        <span>{t('technician.runtime')}</span>
                         <span className="font-medium">{pump.runtime}h</span>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span>WQI</span>
+                        <span>{t('common.wqi')}</span>
                         <span className={`font-medium ${
                           division.wqi >= 80 ? 'text-safe' :
                           division.wqi >= 60 ? 'text-warning' : 'text-danger'
@@ -285,12 +286,12 @@ export function TechnicianDashboard() {
                         {pump.status === 'running' ? (
                           <>
                             <Power className="h-4 w-4 mr-2" />
-                            Stop Pump
+                            {t('technician.stopPump')}
                           </>
                         ) : (
                           <>
                             <Zap className="h-4 w-4 mr-2" />
-                            Start Pump
+                            {t('technician.startPump')}
                           </>
                         )}
                       </Button>
@@ -299,7 +300,7 @@ export function TechnicianDashboard() {
                     {pump.mode === 'auto' && (
                       <div className="text-xs text-muted-foreground text-center p-2 bg-muted/50 rounded">
                         <Timer className="h-3 w-3 inline mr-1" />
-                        Auto Schedule: 6:00-9:00, 18:00-21:00
+                        {t('technician.autoSchedule')}
                       </div>
                     )}
                   </CardContent>
@@ -314,15 +315,15 @@ export function TechnicianDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Button className="h-20 flex flex-col gap-2" variant="outline">
           <Settings className="h-6 w-6" />
-          <span>Set Schedule</span>
+          <span>{t('technician.setSchedule')}</span>
         </Button>
         <Button className="h-20 flex flex-col gap-2" variant="outline">
           <BarChart3 className="h-6 w-6" />
-          <span>View Reports</span>
+          <span>{t('technician.viewReports')}</span>
         </Button>
         <Button className="h-20 flex flex-col gap-2" variant="outline">
           <AlertTriangle className="h-6 w-6" />
-          <span>Emergency Stop</span>
+          <span>{t('technician.emergencyStop')}</span>
         </Button>
       </div>
     </div>

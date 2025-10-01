@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { WaterChatbot } from "@/components/WaterChatbot";
+import { useLanguage } from "@/components/LanguageProvider";
 import { 
   Droplets, 
   AlertTriangle, 
@@ -17,6 +18,7 @@ import {
 } from "lucide-react";
 
 export function UserDashboard() {
+  const { t } = useLanguage();
   const divisions = [
     { id: 1, name: 'रामपुर / Rampur', wqi: 85, status: 'good', supply: 'active' },
     { id: 2, name: 'दानापुर / Danapur', wqi: 72, status: 'moderate', supply: 'active' },
@@ -64,12 +66,11 @@ export function UserDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">नागरिक डैशबोर्ड</h1>
-          <p className="text-muted-foreground">User Dashboard</p>
+          <h1 className="text-3xl font-bold">{t('user.dashboard')}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Droplets className="h-5 w-5 text-primary" />
-          <span className="text-sm text-muted-foreground">Live Status</span>
+          <span className="text-sm text-muted-foreground">{t('user.liveStatus')}</span>
         </div>
       </div>
 
@@ -90,7 +91,7 @@ export function UserDashboard() {
                 </div>
               </div>
               <Button variant="outline" size="sm">
-                सुझाव देखें
+                {t('user.suggestions')}
               </Button>
             </AlertDescription>
           </Alert>
@@ -103,7 +104,7 @@ export function UserDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Thermometer className="h-4 w-4 text-primary" />
-              pH Level
+              {t('common.phLevel')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -116,7 +117,7 @@ export function UserDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4 text-primary" />
-              Turbidity
+              {t('common.turbidity')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -129,7 +130,7 @@ export function UserDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Droplets className="h-4 w-4 text-primary" />
-              Dissolved O₂
+              {t('common.dissolvedOxygen')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -142,7 +143,7 @@ export function UserDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-warning" />
-              Nitrate
+              {t('common.nitrate')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -155,8 +156,8 @@ export function UserDashboard() {
       {/* Division Status */}
       <Card>
         <CardHeader>
-          <CardTitle>क्षेत्रीय पानी की गुणवत्ता / Division Water Quality</CardTitle>
-          <CardDescription>आपके क्षेत्र की live water quality index</CardDescription>
+          <CardTitle>{t('user.divisionWaterQuality')}</CardTitle>
+          <CardDescription>{t('user.divisionDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -171,7 +172,7 @@ export function UserDashboard() {
                 <CardContent className="space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm">WQI Score</span>
+                      <span className="text-sm">{t('user.wqiScore')}</span>
                       <span className={`text-sm font-bold ${
                         division.wqi >= 80 ? 'text-safe' :
                         division.wqi >= 60 ? 'text-warning' : 'text-danger'
@@ -185,12 +186,12 @@ export function UserDashboard() {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Supply Status</span>
+                    <span className="text-xs text-muted-foreground">{t('user.supplyStatus')}</span>
                     <Badge 
                       variant={division.supply === 'active' ? 'default' : 'secondary'}
                       className="text-xs"
                     >
-                      {division.supply === 'active' ? 'Active' : 'Maintenance'}
+                      {division.supply === 'active' ? t('user.active') : t('user.maintenance')}
                     </Badge>
                   </div>
                 </CardContent>
@@ -206,7 +207,7 @@ export function UserDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              मेरी शिकायतें / My Complaints
+              {t('user.myComplaints')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -223,13 +224,13 @@ export function UserDashboard() {
                   }
                   className="text-xs"
                 >
-                  {complaint.status === 'resolved' ? 'Resolved' :
-                   complaint.status === 'in-progress' ? 'In Progress' : 'Pending'}
+                  {complaint.status === 'resolved' ? t('user.resolved') :
+                   complaint.status === 'in-progress' ? t('user.inProgress') : t('user.pending')}
                 </Badge>
               </div>
             ))}
             <Button className="w-full" variant="outline">
-              नई शिकायत दर्ज करें / Register New Complaint
+              {t('user.registerComplaint')}
             </Button>
           </CardContent>
         </Card>
@@ -238,37 +239,37 @@ export function UserDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              समुदायिक स्वास्थ्य / Community Health
+              {t('user.communityHealth')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="p-3 border rounded-lg">
-              <h4 className="font-medium text-sm mb-2">क्षेत्र में फैल रही बीमारियां</h4>
+              <h4 className="font-medium text-sm mb-2">{t('user.diseaseArea')}</h4>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-danger rounded-full"></div>
-                  <span>दस्त (15 cases)</span>
+                  <span>दस्त (15 {t('user.cases')})</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-warning rounded-full"></div>
-                  <span>बुखार (8 cases)</span>
+                  <span>बुखार (8 {t('user.cases')})</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <span>पेट दर्द (12 cases)</span>
+                  <span>पेट दर्द (12 {t('user.cases')})</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-safe rounded-full"></div>
-                  <span>सिरदर्द (6 cases)</span>
+                  <span>सिरदर्द (6 {t('user.cases')})</span>
                 </div>
               </div>
             </div>
             <div className="space-y-2">
               <Button variant="outline" size="sm" className="w-full">
-                पानी शुद्धिकरण टिप्स
+                {t('user.purificationTips')}
               </Button>
               <Button variant="outline" size="sm" className="w-full">
-                समुदायिक चैट
+                {t('user.communityChat')}
               </Button>
             </div>
           </CardContent>

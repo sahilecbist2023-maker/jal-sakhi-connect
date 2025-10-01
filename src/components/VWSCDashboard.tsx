@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { useLanguage } from "@/components/LanguageProvider";
 import { 
   Users, 
   AlertTriangle, 
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 
 export function VWSCDashboard() {
+  const { t, language } = useLanguage();
   const villageInfo = {
     name: 'रामपुर',
     nameEn: 'Rampur',
@@ -63,17 +65,17 @@ export function VWSCDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">VWSC डैशबोर्ड</h1>
-          <p className="text-muted-foreground">Village Water & Sanitation Committee</p>
+          <h1 className="text-3xl font-bold">{t('vwsc.dashboard')}</h1>
+          <p className="text-muted-foreground">{t('vwsc.committee')}</p>
           <div className="flex items-center gap-2 mt-2">
             <MapPin className="h-4 w-4 text-primary" />
             <span className="font-medium">{villageInfo.name} / {villageInfo.nameEn}</span>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-sm text-muted-foreground">जनसंख्या / Population</div>
+          <div className="text-sm text-muted-foreground">{t('vwsc.population')}</div>
           <div className="text-2xl font-bold">{villageInfo.population}</div>
-          <div className="text-xs text-muted-foreground">{villageInfo.households} परिवार</div>
+          <div className="text-xs text-muted-foreground">{villageInfo.households} {t('vwsc.households')}</div>
         </div>
       </div>
 
@@ -83,13 +85,13 @@ export function VWSCDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Droplets className="h-4 w-4 text-primary" />
-              WQI Score
+              {t('common.wqi')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{villageInfo.wqi}</div>
             <Progress value={villageInfo.wqi} className="h-2 mt-2" />
-            <p className="text-xs text-safe mt-1">Good Quality</p>
+            <p className="text-xs text-safe mt-1">{t('vwsc.goodQuality')}</p>
           </CardContent>
         </Card>
 
@@ -97,13 +99,13 @@ export function VWSCDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4 text-safe" />
-              आज की आपूर्ति
+              {t('vwsc.todaySupply')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{waterSupply.todaySupply}%</div>
             <Progress value={waterSupply.todaySupply} className="h-2 mt-2 safe" />
-            <p className="text-xs text-muted-foreground mt-1">{waterSupply.status === 'active' ? 'Active' : 'Inactive'}</p>
+            <p className="text-xs text-muted-foreground mt-1">{waterSupply.status === 'active' ? t('user.active') : 'Inactive'}</p>
           </CardContent>
         </Card>
 
@@ -111,13 +113,13 @@ export function VWSCDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <IndianRupee className="h-4 w-4 text-primary" />
-              मासिक संग्रह
+              {t('vwsc.monthlyCollection')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">₹{(finances.monthlyCollection / 1000).toFixed(1)}k</div>
             <p className="text-xs text-muted-foreground mt-1">
-              <TrendingUp className="h-3 w-3 inline text-safe" /> +12% from last month
+              <TrendingUp className="h-3 w-3 inline text-safe" /> +12% {t('vwsc.fromLastMonth')}
             </p>
           </CardContent>
         </Card>
@@ -126,14 +128,14 @@ export function VWSCDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Bell className="h-4 w-4 text-warning" />
-              लंबित शिकायतें
+              {t('vwsc.pendingComplaints')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-warning">
               {complaints.filter(c => c.status === 'pending').length}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">कुल {complaints.length} शिकायतें</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('vwsc.totalComplaints')} {complaints.length} {t('vwsc.complaints')}</p>
           </CardContent>
         </Card>
       </div>
@@ -143,22 +145,22 @@ export function VWSCDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            पानी आपूर्ति समय सारणी / Water Supply Schedule
+            {t('vwsc.waterSchedule')}
           </CardTitle>
-          <CardDescription>गाँव के लिए पानी आपूर्ति का समय</CardDescription>
+          <CardDescription>{t('vwsc.scheduleDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 border rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-primary/10 text-primary">सुबह / Morning</Badge>
+                <Badge className="bg-primary/10 text-primary">{t('vwsc.morning')}</Badge>
                 <CheckCircle className="h-4 w-4 text-safe" />
               </div>
               <div className="text-lg font-semibold">{waterSupply.morningSlot}</div>
             </div>
             <div className="p-4 border rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-primary/10 text-primary">शाम / Evening</Badge>
+                <Badge className="bg-primary/10 text-primary">{t('vwsc.evening')}</Badge>
                 <CheckCircle className="h-4 w-4 text-safe" />
               </div>
               <div className="text-lg font-semibold">{waterSupply.eveningSlot}</div>
@@ -174,7 +176,7 @@ export function VWSCDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              शिकायतें / Complaints
+              {t('vwsc.complaintsTitle')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -200,13 +202,13 @@ export function VWSCDashboard() {
                   }
                   className="text-xs"
                 >
-                  {complaint.status === 'resolved' ? 'Resolved' :
-                   complaint.status === 'in-progress' ? 'In Progress' : 'Pending'}
+                  {complaint.status === 'resolved' ? t('user.resolved') :
+                   complaint.status === 'in-progress' ? t('user.inProgress') : t('user.pending')}
                 </Badge>
               </div>
             ))}
             <Button className="w-full" variant="outline">
-              सभी शिकायतें देखें / View All Complaints
+              {t('vwsc.viewAll')}
             </Button>
           </CardContent>
         </Card>
@@ -216,32 +218,32 @@ export function VWSCDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <IndianRupee className="h-5 w-5" />
-              वित्तीय सारांश / Financial Summary
+              {t('vwsc.financialSummary')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-safe/10 rounded-lg">
-                <span className="text-sm">मासिक संग्रह</span>
+                <span className="text-sm">{t('vwsc.monthlyCollection')}</span>
                 <span className="font-bold text-safe">₹{finances.monthlyCollection.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-warning/10 rounded-lg">
-                <span className="text-sm">मासिक खर्च</span>
+                <span className="text-sm">{t('vwsc.monthlyExpense')}</span>
                 <span className="font-bold text-warning">₹{finances.expenses.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg">
-                <span className="text-sm">कुल शेष राशि</span>
+                <span className="text-sm">{t('vwsc.totalBalance')}</span>
                 <span className="font-bold text-primary">₹{finances.balance.toLocaleString()}</span>
               </div>
             </div>
             <Alert>
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                <span className="font-medium">{finances.pendingPayments} परिवारों</span> का भुगतान लंबित है
+                <span className="font-medium">{finances.pendingPayments} {t('vwsc.pendingPayments')}</span>
               </AlertDescription>
             </Alert>
             <Button className="w-full water-gradient text-white">
-              वित्तीय रिपोर्ट देखें / View Financial Report
+              {t('vwsc.viewReport')}
             </Button>
           </CardContent>
         </Card>
@@ -254,7 +256,7 @@ export function VWSCDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              समिति सदस्य / Committee Members
+              {t('vwsc.committeeMembers')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -275,7 +277,7 @@ export function VWSCDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              आगामी बैठकें / Upcoming Meetings
+              {t('vwsc.upcomingMeetings')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -288,12 +290,12 @@ export function VWSCDashboard() {
                 <p className="font-medium mb-1">{meeting.topic}</p>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Users className="h-3 w-3" />
-                  {meeting.attendees} सदस्य आमंत्रित
+                  {meeting.attendees} {t('vwsc.membersInvited')}
                 </div>
               </div>
             ))}
             <Button className="w-full" variant="outline">
-              नई बैठक शेड्यूल करें / Schedule New Meeting
+              {t('vwsc.scheduleMeeting')}
             </Button>
           </CardContent>
         </Card>
