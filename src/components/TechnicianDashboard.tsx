@@ -6,6 +6,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/components/LanguageProvider";
 import { 
   Settings, 
@@ -24,6 +29,12 @@ import {
 
 export function TechnicianDashboard() {
   const { t } = useLanguage();
+  const { toast } = useToast();
+  const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [startTime, setStartTime] = useState("06:00");
+  const [endTime, setEndTime] = useState("09:00");
+  
   const [pumpStates, setPumpStates] = useState({
     rampur: { mode: 'auto', status: 'running', runtime: 18.5 },
     danapur: { mode: 'manual', status: 'stopped', runtime: 12.2 },
@@ -93,6 +104,35 @@ export function TechnicianDashboard() {
       case 'maintenance': return 'danger';
       default: return 'muted';
     }
+  };
+
+  const handleScheduleSave = () => {
+    if (!selectedDivision || !startTime || !endTime) {
+      return;
+    }
+    // Save schedule logic here
+    toast({
+      title: t('technician.scheduleSuccess'),
+      description: `${selectedDivision}: ${startTime} - ${endTime}`,
+    });
+    setScheduleDialogOpen(false);
+  };
+
+  const handleEmergencyStop = () => {
+    setPumpStates(prev => {
+      const newStates = { ...prev };
+      Object.keys(newStates).forEach(key => {
+        newStates[key as keyof typeof newStates] = {
+          ...newStates[key as keyof typeof newStates],
+          status: 'stopped'
+        };
+      });
+      return newStates;
+    });
+    toast({
+      title: t('technician.emergencyStopSuccess'),
+      variant: "destructive",
+    });
   };
 
   return (
@@ -313,18 +353,81 @@ export function TechnicianDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Button className="h-20 flex flex-col gap-2" variant="outline">
-          <Settings className="h-6 w-6" />
-          <span>{t('technician.setSchedule')}</span>
-        </Button>
+        <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="h-20 flex flex-col gap-2" variant="outline">
+              <Settings className="h-6 w-6" />
+              <span>{t('technician.setSchedule')}</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('technician.scheduleTitle')}</DialogTitle>
+              <DialogDescription>{t('technician.scheduleDesc')}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>{t('technician.division')}</Label>
+                <Select value={selectedDivision} onValueChange={setSelectedDivision}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('technician.selectDivision')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {divisions.map((div) => (
+                      <SelectItem key={div.id} value={div.id}>
+                        {div.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>{t('technician.startTime')}</Label>
+                <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('technician.endTime')}</Label>
+                <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setScheduleDialogOpen(false)}>
+                {t('technician.cancel')}
+              </Button>
+              <Button onClick={handleScheduleSave}>
+                {t('technician.save')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Button className="h-20 flex flex-col gap-2" variant="outline">
           <BarChart3 className="h-6 w-6" />
           <span>{t('technician.viewReports')}</span>
         </Button>
-        <Button className="h-20 flex flex-col gap-2" variant="outline">
-          <AlertTriangle className="h-6 w-6" />
-          <span>{t('technician.emergencyStop')}</span>
-        </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button className="h-20 flex flex-col gap-2" variant="outline">
+              <AlertTriangle className="h-6 w-6" />
+              <span>{t('technician.emergencyStop')}</span>
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('technician.emergencyStopTitle')}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('technician.emergencyStopDesc')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('technician.cancel')}</AlertDialogCancel>
+              <AlertDialogAction onClick={handleEmergencyStop} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                {t('technician.confirmStop')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
