@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ interface LayoutProps {
 
 export function Layout({ children, userRole, onLogout }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
 
@@ -115,7 +117,7 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
             </Button>
 
             {/* Settings */}
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => setIsSettingsOpen(true)}>
               <Settings className="h-5 w-5" />
             </Button>
 
@@ -141,14 +143,14 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
                 <Button variant="ghost" size="sm">
                   <Bell className="h-5 w-5" />
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" onClick={() => setIsSettingsOpen(true)}>
                   <Settings className="h-5 w-5" />
                 </Button>
               </div>
             </div>
             <Button variant="outline" size="sm" className="w-full" onClick={onLogout}>
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              {t('layout.logout')}
             </Button>
           </div>
         )}
@@ -158,6 +160,37 @@ export function Layout({ children, userRole, onLogout }: LayoutProps) {
       <main className="flex-1">
         {children}
       </main>
+
+      {/* Settings Dialog */}
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('layout.settings')}</DialogTitle>
+            <DialogDescription>
+              {language === 'hi' ? 'भाषा और थीम सेटिंग्स' : 'Language and theme settings'}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-medium mb-2">{t('common.language')}</p>
+              <div className="flex gap-2">
+                <Button variant={language === 'hi' ? 'default' : 'outline'} onClick={() => setLanguage('hi')}>{t('common.hindi')}</Button>
+                <Button variant={language === 'en' ? 'default' : 'outline'} onClick={() => setLanguage('en')}>{t('common.english')}</Button>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium mb-2">{theme === 'system' ? (language === 'hi' ? 'थीम (सिस्टम)' : 'Theme (System)') : (language === 'hi' ? 'थीम' : 'Theme')}</p>
+              <div className="flex gap-2">
+                <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>Light</Button>
+                <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>Dark</Button>
+                <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>System</Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <footer className="border-t bg-card/30 py-4 px-6">

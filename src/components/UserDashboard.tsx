@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { WaterChatbot } from "@/components/WaterChatbot";
+import { CommunityChat } from "@/components/CommunityChat";
 import { useLanguage } from "@/components/LanguageProvider";
 import { 
   Droplets, 
@@ -109,7 +110,7 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{waterQuality.ph}</div>
-            <p className="text-xs text-muted-foreground">Normal Range: 6.5-8.5</p>
+            <p className="text-xs text-muted-foreground">{t('technician.normalRange')}: 6.5-8.5</p>
           </CardContent>
         </Card>
 
@@ -122,7 +123,7 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{waterQuality.turbidity} NTU</div>
-            <p className="text-xs text-muted-foreground">Good: &lt;5 NTU</p>
+            <p className="text-xs text-muted-foreground">{t('technician.good')}: &lt;5 NTU</p>
           </CardContent>
         </Card>
 
@@ -135,7 +136,7 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{waterQuality.dissolvedOxygen} mg/L</div>
-            <p className="text-xs text-muted-foreground">Good: &gt;6 mg/L</p>
+            <p className="text-xs text-muted-foreground">{t('technician.good')}: &gt;6 mg/L</p>
           </CardContent>
         </Card>
 
@@ -148,7 +149,7 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{waterQuality.nitrate} mg/L</div>
-            <p className="text-xs text-muted-foreground">Safe: &lt;45 mg/L</p>
+            <p className="text-xs text-muted-foreground">{t('technician.good')}: &lt;45 mg/L</p>
           </CardContent>
         </Card>
       </div>
@@ -275,6 +276,9 @@ export function UserDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Community Chat */}
+      <CommunityChat />
 
       {/* AI Chatbot */}
       <WaterChatbot />

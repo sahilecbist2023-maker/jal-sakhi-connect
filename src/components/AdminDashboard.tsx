@@ -24,8 +24,10 @@ import {
   Settings,
   Bell
 } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export function AdminDashboard() {
+  const { t } = useLanguage();
   const [reportForm, setReportForm] = useState({ technician: '', message: '', priority: 'medium' });
 
   const divisions = [
@@ -155,12 +157,12 @@ export function AdminDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">प्रशासक डैशबोर्ड</h1>
-          <p className="text-muted-foreground">Admin Dashboard - Gram Panchayat / VWSC</p>
+          <h1 className="text-3xl font-bold">{t('admin.dashboard')}</h1>
+          <p className="text-muted-foreground">{t('admin.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-primary" />
-          <span className="text-sm text-muted-foreground">System Overview</span>
+          <span className="text-sm text-muted-foreground">{t('admin.systemOverview')}</span>
         </div>
       </div>
 
@@ -170,12 +172,12 @@ export function AdminDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
-              Total Population
+              {t('admin.totalPopulation')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.totalPopulation.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Across 6 divisions</p>
+            <p className="text-xs text-muted-foreground">{t('admin.acrossDivisions')}</p>
           </CardContent>
         </Card>
 
@@ -183,12 +185,12 @@ export function AdminDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Droplets className="h-4 w-4 text-primary" />
-              Average WQI
+              {t('admin.averageWQI')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.averageWQI}</div>
-            <p className="text-xs text-muted-foreground">System-wide average</p>
+            <p className="text-xs text-muted-foreground">{t('admin.systemWide')}</p>
           </CardContent>
         </Card>
 
@@ -196,12 +198,12 @@ export function AdminDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4 text-safe" />
-              Active Pumps
+              {t('admin.activePumps')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.activePumps}/6</div>
-            <p className="text-xs text-muted-foreground">Pumps operational</p>
+            <p className="text-xs text-muted-foreground">{t('admin.pumpsOperational')}</p>
           </CardContent>
         </Card>
 
@@ -209,32 +211,32 @@ export function AdminDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <FileText className="h-4 w-4 text-warning" />
-              Open Complaints
+              {t('admin.openComplaints')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.totalComplaints}</div>
-            <p className="text-xs text-muted-foreground">Pending resolution</p>
+            <p className="text-xs text-muted-foreground">{t('admin.pendingResolution')}</p>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="divisions">Divisions</TabsTrigger>
-          <TabsTrigger value="complaints">Complaints</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
+      <TabsList className="grid w-full grid-cols-4">
+        <TabsTrigger value="overview">{t('admin.overview')}</TabsTrigger>
+        <TabsTrigger value="divisions">{t('admin.divisions')}</TabsTrigger>
+        <TabsTrigger value="complaints">{t('admin.complaints')}</TabsTrigger>
+        <TabsTrigger value="reports">{t('admin.reports')}</TabsTrigger>
+      </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           {/* Critical Alerts */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5 text-danger" />
-                Critical Alerts
-              </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-danger" />
+              {t('admin.criticalAlerts')}
+            </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Alert className="border-danger">
@@ -258,7 +260,7 @@ export function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
-                  System Performance
+                  {t('admin.systemPerformance')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -290,26 +292,26 @@ export function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
-                  Quick Stats
+                  {t('admin.quickStats')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm">Average Pressure</span>
-                  <span className="font-medium">{systemMetrics.averagePressure} PSI</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Total Leakages</span>
-                  <span className="font-medium text-danger">{systemMetrics.totalLeakages}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Energy Efficiency</span>
-                  <span className="font-medium text-safe">85%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Complaint Resolution Rate</span>
-                  <span className="font-medium">72%</span>
-                </div>
+              <div className="flex justify-between">
+                <span className="text-sm">{t('admin.averagePressure')}</span>
+                <span className="font-medium">{systemMetrics.averagePressure} PSI</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">{t('admin.totalLeakages')}</span>
+                <span className="font-medium text-danger">{systemMetrics.totalLeakages}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">{t('admin.energyEfficiency')}</span>
+                <span className="font-medium text-safe">85%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">{t('admin.complaintResolution')}</span>
+                <span className="font-medium">72%</span>
+              </div>
               </CardContent>
             </Card>
           </div>
@@ -382,13 +384,13 @@ export function AdminDashboard() {
                     <Alert className="border-warning p-2">
                       <AlertTriangle className="h-3 w-3" />
                       <AlertDescription className="text-xs">
-                        {division.leakages} leakage(s) detected
+                        {division.leakages} {t('admin.leakageDetected')}
                       </AlertDescription>
                     </Alert>
                   )}
                   
                   <Button size="sm" variant="outline" className="w-full text-xs">
-                    View Details
+                    {t('admin.viewDetails')}
                   </Button>
                 </CardContent>
               </Card>
@@ -401,9 +403,9 @@ export function AdminDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Recent Complaints
+                {t('admin.recentComplaints')}
               </CardTitle>
-              <CardDescription>शिकायत प्रबंधन और ट्रैकिंग</CardDescription>
+              <CardDescription>{t('admin.complaintManagement')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">

@@ -9,7 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Water-themed color palette - Light Mode */
-    --background: 210 35% 98%;
+    --background: 210 35% 97%;
     --foreground: 215 30% 10%;
 
     --card: 0 0% 100%;
@@ -52,8 +52,8 @@ All colors MUST be HSL.
     --destructive: 0 85% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 30% 85%;
-    --input: 210 30% 88%;
+    --border: 210 30% 78%;
+    --input: 210 30% 82%;
     --ring: 206 85% 45%;
 
     --radius: 0.5rem;

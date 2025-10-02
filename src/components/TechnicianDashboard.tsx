@@ -135,7 +135,7 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Thermometer className="h-4 w-4 text-primary" />
-              pH Level
+              {t('common.phLevel')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -149,7 +149,7 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4 text-primary" />
-              Turbidity
+              {t('common.turbidity')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -163,7 +163,7 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Droplets className="h-4 w-4 text-primary" />
-              Dissolved O₂
+              {t('common.dissolvedOxygen')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -177,13 +177,13 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-warning" />
-              Nitrate
+              {t('common.nitrate')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.nitrate} mg/L</div>
             <Progress value={(sensorData.nitrate / 45) * 100} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">Safe: &lt;45 mg/L</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('technician.good')}: &lt;45 mg/L</p>
           </CardContent>
         </Card>
 
@@ -191,7 +191,7 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Gauge className="h-4 w-4 text-primary" />
-              Pressure
+              {t('common.pressure')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -205,7 +205,7 @@ export function TechnicianDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-primary" />
-              Flow Rate
+              {t('common.flowRate')}
             </CardTitle>
           </CardHeader>
           <CardContent>
