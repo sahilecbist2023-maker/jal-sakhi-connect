@@ -31,7 +31,7 @@ export function TechnicianDashboard() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
-  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedDivision, setSelectedDivision] = useState("rampur");
   const [startTime, setStartTime] = useState("06:00");
   const [endTime, setEndTime] = useState("09:00");
   
@@ -54,9 +54,7 @@ export function TechnicianDashboard() {
   };
 
   const alerts = [
-    { type: 'warning', message: 'गोपालगंज पंप में असामान्य कंपन', severity: 'medium', time: '10 min ago' },
-    { type: 'danger', message: 'मधोपुर में दबाव कम', severity: 'high', time: '5 min ago' },
-    { type: 'info', message: 'दानापुर पंप मैन्युअल मोड में', severity: 'low', time: '15 min ago' }
+    { type: 'info', message: 'रामपुर पंप सामान्य रूप से चल रहा है', severity: 'low', time: '2 min ago' }
   ];
 
   const divisions = [
@@ -113,22 +111,19 @@ export function TechnicianDashboard() {
     // Save schedule logic here
     toast({
       title: t('technician.scheduleSuccess'),
-      description: `${selectedDivision}: ${startTime} - ${endTime}`,
+      description: `${(divisions.find(d => d.id === selectedDivision)?.name) || selectedDivision}: ${startTime} - ${endTime}`,
     });
     setScheduleDialogOpen(false);
   };
 
   const handleEmergencyStop = () => {
-    setPumpStates(prev => {
-      const newStates = { ...prev };
-      Object.keys(newStates).forEach(key => {
-        newStates[key as keyof typeof newStates] = {
-          ...newStates[key as keyof typeof newStates],
-          status: 'stopped'
-        };
-      });
-      return newStates;
-    });
+    setPumpStates(prev => ({
+      ...prev,
+      rampur: {
+        ...prev.rampur,
+        status: 'stopped'
+      }
+    }));
     toast({
       title: t('technician.emergencyStopSuccess'),
       variant: "destructive",
@@ -271,9 +266,10 @@ export function TechnicianDashboard() {
           <CardDescription>{t('technician.pumpControlDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {divisions.map((division) => {
-              const pump = pumpStates[division.id as keyof typeof pumpStates];
+          <div className="grid grid-cols-1 gap-4">
+            {(() => {
+              const division = assignedVillage;
+              const pump = assignedPump;
               return (
                 <Card key={division.id} className="border-l-4 border-l-primary">
                   <CardHeader className="pb-2">
@@ -351,7 +347,7 @@ export function TechnicianDashboard() {
                   </CardContent>
                 </Card>
               );
-            })}
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -373,18 +369,7 @@ export function TechnicianDashboard() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>{t('technician.division')}</Label>
-                <Select value={selectedDivision} onValueChange={setSelectedDivision}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('technician.selectDivision')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {divisions.map((div) => (
-                      <SelectItem key={div.id} value={div.id}>
-                        {div.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="text-sm font-medium">{assignedVillage.name}</div>
               </div>
               <div className="space-y-2">
                 <Label>{t('technician.startTime')}</Label>

@@ -46,10 +46,10 @@ export function HomePage({ onGetStarted }: HomePageProps) {
     <div className="min-h-screen relative">
       {/* Hero Background */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroImage})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background/90 to-safe/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background/10 to-safe/5" />
 
       {/* Header with Language & Theme */}
       <header className="relative z-10 flex justify-between items-center p-4 bg-card/50 border-b border-border shadow-sm">
