@@ -49,10 +49,10 @@ export function HomePage({ onGetStarted }: HomePageProps) {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{ backgroundImage: `url(${heroImage})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background/95 to-safe/15" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background/90 to-safe/10" />
 
       {/* Header with Language & Theme */}
-      <header className="relative z-10 flex justify-between items-center p-4 bg-card/80 backdrop-blur-md border-b border-border shadow-sm">
+      <header className="relative z-10 flex justify-between items-center p-4 bg-card/50 border-b border-border shadow-sm">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-full hero-gradient shadow-water">
             <Droplets className="h-6 w-6 text-white" />
@@ -116,7 +116,7 @@ export function HomePage({ onGetStarted }: HomePageProps) {
         </div>
 
         {/* About Section */}
-        <Card className="bg-card/90 backdrop-blur-md border-primary/30 shadow-card">
+        <Card className="bg-card/70 border-primary/30 shadow-card">
           <CardHeader>
             <CardTitle className="text-2xl text-center">{t('home.about')}</CardTitle>
           </CardHeader>
@@ -139,7 +139,7 @@ export function HomePage({ onGetStarted }: HomePageProps) {
               return (
                 <Card 
                   key={index}
-                  className="bg-card/90 backdrop-blur-md border-primary/30 hover:shadow-water transition-all duration-300 hover:scale-105"
+                  className="bg-card/70 border-primary/30 hover:shadow-water transition-all duration-300 hover:scale-105"
                 >
                   <CardHeader className="text-center pb-4">
                     <div className="mx-auto p-4 rounded-full bg-primary/10 mb-4">
