@@ -6,7 +6,7 @@ Jal Rakshak
 
 **URL**: https://jal-sakhi-connect.lovable.app/
 
-REepo link [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Repo link [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
 
