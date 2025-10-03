@@ -4,7 +4,7 @@ Jal Rakshak
 ## Project info
 
 
-**URL**: https://jal-sakhi-connect.lovable.app/
+**URL**: https://jal-sakhi-connect.vercel.app/
 
 Repo link [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -19,4 +19,3 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
-
