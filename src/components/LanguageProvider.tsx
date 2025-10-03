@@ -72,6 +72,10 @@ const translations = {
     
     // User Dashboard
     "user.dashboard": "Citizen Dashboard",
+    "user.welcome": "Welcome",
+    "user.myVillageWater": "My Village Water Quality",
+    "user.nearbyVillages": "Nearby Villages",
+    "user.nearbyVillagesDesc": "Water quality in surrounding areas",
     "user.liveStatus": "Live Status",
     "user.suggestions": "View Suggestions",
     "user.divisionWaterQuality": "Division Water Quality",
@@ -274,6 +278,10 @@ const translations = {
     
     // User Dashboard
     "user.dashboard": "नागरिक डैशबोर्ड",
+    "user.welcome": "स्वागत है",
+    "user.myVillageWater": "मेरे गाँव का पानी गुणवत्ता",
+    "user.nearbyVillages": "आस-पास के गाँव",
+    "user.nearbyVillagesDesc": "आसपास के क्षेत्रों में जल गुणवत्ता",
     "user.liveStatus": "लाइव स्थिति",
     "user.suggestions": "सुझाव देखें",
     "user.divisionWaterQuality": "क्षेत्रीय पानी की गुणवत्ता",

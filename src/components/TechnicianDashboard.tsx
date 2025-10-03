@@ -135,12 +135,17 @@ export function TechnicianDashboard() {
     });
   };
 
+  // Single village assignment for technician
+  const assignedVillage = divisions[0]; // रामपुर / Rampur
+  const assignedPump = pumpStates.rampur;
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">{t('technician.dashboard')}</h1>
+          <p className="text-muted-foreground mt-1">{assignedVillage.name}</p>
         </div>
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />

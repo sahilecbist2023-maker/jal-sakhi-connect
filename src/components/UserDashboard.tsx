@@ -20,8 +20,17 @@ import {
 
 export function UserDashboard() {
   const { t } = useLanguage();
-  const divisions = [
-    { id: 1, name: 'रामपुर / Rampur', wqi: 85, status: 'good', supply: 'active' },
+  
+  // User's own village
+  const userVillage = {
+    name: 'रामपुर / Rampur',
+    wqi: 85,
+    status: 'good',
+    supply: 'active'
+  };
+
+  // Nearby villages
+  const nearbyVillages = [
     { id: 2, name: 'दानापुर / Danapur', wqi: 72, status: 'moderate', supply: 'active' },
     { id: 3, name: 'सागर / Sagar', wqi: 91, status: 'good', supply: 'active' },
     { id: 4, name: 'मधोपुर / Madhopur', wqi: 68, status: 'moderate', supply: 'maintenance' },
@@ -64,16 +73,65 @@ export function UserDashboard() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t('user.dashboard')}</h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <Droplets className="h-5 w-5 text-primary" />
-          <span className="text-sm text-muted-foreground">{t('user.liveStatus')}</span>
-        </div>
-      </div>
+      {/* User Profile Section */}
+      <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl">{t('user.welcome')}, राज कुमार</CardTitle>
+              <CardDescription className="text-base mt-1">
+                📍 {userVillage.name}
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Droplets className="h-5 w-5 text-primary" />
+              <span className="text-sm text-muted-foreground">{t('user.liveStatus')}</span>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Community Chat - Priority Feature */}
+      <CommunityChat />
+
+      {/* My Village Water Quality */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Droplets className="h-5 w-5 text-primary" />
+            {t('user.myVillageWater')}
+          </CardTitle>
+          <CardDescription>{userVillage.name}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">{t('user.wqiScore')}</span>
+              <div className="flex items-center gap-2">
+                {getStatusIcon(userVillage.status)}
+                <span className={`text-2xl font-bold ${
+                  userVillage.wqi >= 80 ? 'text-safe' :
+                  userVillage.wqi >= 60 ? 'text-warning' : 'text-danger'
+                }`}>
+                  {userVillage.wqi}
+                </span>
+              </div>
+            </div>
+            <Progress 
+              value={userVillage.wqi} 
+              className={`h-3 ${getWQIColor(userVillage.wqi)}`}
+            />
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-sm text-muted-foreground">{t('user.supplyStatus')}</span>
+              <Badge 
+                variant={userVillage.supply === 'active' ? 'default' : 'secondary'}
+              >
+                {userVillage.supply === 'active' ? t('user.active') : t('user.maintenance')}
+              </Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Health Alerts */}
       <div className="space-y-3">
@@ -99,7 +157,7 @@ export function UserDashboard() {
         ))}
       </div>
 
-      {/* Water Quality Overview */}
+      {/* Water Quality Parameters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
@@ -154,20 +212,20 @@ export function UserDashboard() {
         </Card>
       </div>
 
-      {/* Division Status */}
+      {/* Nearby Villages */}
       <Card>
         <CardHeader>
-          <CardTitle>{t('user.divisionWaterQuality')}</CardTitle>
-          <CardDescription>{t('user.divisionDesc')}</CardDescription>
+          <CardTitle>{t('user.nearbyVillages')}</CardTitle>
+          <CardDescription>{t('user.nearbyVillagesDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {divisions.map((division) => (
-              <Card key={division.id} className="border-l-4 border-l-primary">
+            {nearbyVillages.map((village) => (
+              <Card key={village.id} className="border-l-4 border-l-muted">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm">{division.name}</CardTitle>
-                    {getStatusIcon(division.status)}
+                    <CardTitle className="text-sm">{village.name}</CardTitle>
+                    {getStatusIcon(village.status)}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -175,24 +233,24 @@ export function UserDashboard() {
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm">{t('user.wqiScore')}</span>
                       <span className={`text-sm font-bold ${
-                        division.wqi >= 80 ? 'text-safe' :
-                        division.wqi >= 60 ? 'text-warning' : 'text-danger'
+                        village.wqi >= 80 ? 'text-safe' :
+                        village.wqi >= 60 ? 'text-warning' : 'text-danger'
                       }`}>
-                        {division.wqi}
+                        {village.wqi}
                       </span>
                     </div>
                     <Progress 
-                      value={division.wqi} 
-                      className={`h-2 ${getWQIColor(division.wqi)}`}
+                      value={village.wqi} 
+                      className={`h-2 ${getWQIColor(village.wqi)}`}
                     />
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">{t('user.supplyStatus')}</span>
                     <Badge 
-                      variant={division.supply === 'active' ? 'default' : 'secondary'}
+                      variant={village.supply === 'active' ? 'default' : 'secondary'}
                       className="text-xs"
                     >
-                      {division.supply === 'active' ? t('user.active') : t('user.maintenance')}
+                      {village.supply === 'active' ? t('user.active') : t('user.maintenance')}
                     </Badge>
                   </div>
                 </CardContent>
@@ -276,9 +334,6 @@ export function UserDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Community Chat */}
-      <CommunityChat />
 
       {/* AI Chatbot */}
       <WaterChatbot />
